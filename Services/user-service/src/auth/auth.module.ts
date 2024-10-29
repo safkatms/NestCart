@@ -8,7 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
     UsersModule,
-    JwtModule.register({}) // Import without specifying secret or options
+    JwtModule.register({}),
   ],
   controllers: [AuthController],
   providers: [AuthService, GoogleStrategy],

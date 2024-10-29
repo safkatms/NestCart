@@ -38,20 +38,14 @@ export class UsersService {
     throw new Error('Invalid credentials');
   }
 
-  async findOrCreateUser(profile: any): Promise<User> {
-    const user = await this.usersRepository.findOne({
-      where: { googleId: profile.id },
-    });
+  // Find user by Google ID
+  async findByGoogleId(googleId: string): Promise<User | undefined> {
+    return this.usersRepository.findOne({ where: { googleId } });
+  }
 
-    if (user) {
-      return user;
-    }
-
-    const newUser = this.usersRepository.create({
-      email: profile.emails[0].value,
-      googleId: profile.id,
-    });
-
-    return this.usersRepository.save(newUser);
+  // Create a new user from Google profile
+  async createUserFromGoogle(userData: { googleId: string; email: string; name: string; profilePicture: string }): Promise<User> {
+    const user = this.usersRepository.create(userData);
+    return this.usersRepository.save(user);
   }
 }
