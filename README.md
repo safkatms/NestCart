@@ -7,18 +7,12 @@ Welcome to the NestCart User Service! This service is part of the NestCart e-com
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Installation](#installation)
-- [Configuration](#configuration)
-- [API Endpoints](#api-endpoints)
-- [Usage](#usage)
-- [Running the Application](#running-the-application)
-- [Testing](#testing)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
 - User registration with password hashing
 - User login with JWT authentication
+- Google OAuth2 authentication
 - Secure access to protected routes
 - User data management
 - Swagger documentation for API endpoints
@@ -37,4 +31,5 @@ Welcome to the NestCart User Service! This service is part of the NestCart e-com
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/NestCart.git
+   git clone https://github.com/safkatms/NestCart.git
+   cd NestCart/user-service
