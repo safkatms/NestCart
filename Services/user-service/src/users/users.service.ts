@@ -11,7 +11,7 @@ import * as bcrypt from 'bcryptjs';
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private usersRepository: Repository<User>,  // Directly using TypeORM Repository
     private jwtService: JwtService,
   ) {}
 
@@ -25,7 +25,10 @@ export class UsersService {
   }
 
   async login(loginDto: LoginDto) {
-    const user = await this.usersRepository.findOne({ where: { email: loginDto.email } });
+    const user = await this.usersRepository.findOne({
+      where: { email: loginDto.email },
+    });
+    
     if (user && await bcrypt.compare(loginDto.password, user.password)) {
       const payload = { email: user.email, sub: user.id };
       return {
@@ -33,5 +36,22 @@ export class UsersService {
       };
     }
     throw new Error('Invalid credentials');
+  }
+
+  async findOrCreateUser(profile: any): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { googleId: profile.id },
+    });
+
+    if (user) {
+      return user;
+    }
+
+    const newUser = this.usersRepository.create({
+      email: profile.emails[0].value,
+      googleId: profile.id,
+    });
+
+    return this.usersRepository.save(newUser);
   }
 }
