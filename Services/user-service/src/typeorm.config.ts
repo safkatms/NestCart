@@ -2,6 +2,7 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { User } from './users/entities/user.entity';
 import * as dotenv from 'dotenv';
+import { PasswordReset } from './auth/entities/passwordReset.entity';
 
 dotenv.config();
 
@@ -12,6 +13,6 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   username: process.env.DB_USERNAME || 'postgres',
   password: process.env.DB_PASSWORD || 'password',
   database: process.env.DB_NAME || 'nestcart_users',
-  entities: [User],
+  entities: [User,PasswordReset],
   synchronize: true, // Set to false in production
 };
