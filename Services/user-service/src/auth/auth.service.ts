@@ -8,6 +8,7 @@ import { ResetPasswordDto, SendOtpDto, VerifyOtpDto } from './dto/otp.dto';
 import { UsersService } from 'src/users/users.service'; // Import your UserService for user management
 import * as bcrypt from 'bcryptjs';
 import * as crypto from 'crypto';
+import { ChangePasswordDto } from './dto/change.password.dto';
 dotenv.config();
 
 @Injectable()
@@ -17,7 +18,7 @@ export class AuthService {
     private passwordResetRepository: Repository<PasswordReset>,
     private usersService: UsersService,
     private readonly jwtService: JwtService
-  ) {}
+  ) { }
 
   async generateJwtToken(user: any) {
     const payload = { email: user.email, sub: user.id };
@@ -43,9 +44,9 @@ export class AuthService {
       // Check if the last request was within 1 minute
       const timeDifference = new Date().getTime() - lastRequest.createdAt.getTime();
       if (timeDifference < 60000) { // 1 minute in milliseconds
-          throw new BadRequestException('OTP can only be sent once per minute');
+        throw new BadRequestException('OTP can only be sent once per minute');
       }
-  }
+    }
 
     // Generate OTP and expiration time
     const otp = crypto.randomInt(100000, 999999).toString(); // Generate a simple OTP
@@ -103,4 +104,42 @@ export class AuthService {
 
     return 'Password has been reset successfully';
   }
+
+
+  //Change Password
+  async changePassword(userId: number, changePasswordDto: ChangePasswordDto): Promise<string> {
+    const { currentPassword, newPassword, confirmPassword } = changePasswordDto;
+
+    // Check if new password and confirm password match
+    if (newPassword !== confirmPassword) {
+      throw new BadRequestException('New password and confirm password do not match');
+    }
+
+    // Find user by ID
+    const user = await this.usersService.findById(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    // If the user does not have a local password
+    if (!user.password) {
+      // Hash and set the new password directly
+      const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+      await this.usersService.updatePassword(user.email, hashedNewPassword);
+      return 'Password has been set successfully';
+    }
+
+    // Verify current password for users with a local password
+    const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+    if (!isPasswordValid) {
+      throw new BadRequestException('Current password is incorrect');
+    }
+
+    // Hash and update the new password
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    await this.usersService.updatePassword(user.email, hashedNewPassword);
+
+    return 'Password changed successfully';
+  }
+
 }

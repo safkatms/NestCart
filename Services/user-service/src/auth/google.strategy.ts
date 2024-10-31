@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
-import { UsersService } from 'src/users/users.service'; // Ensure the path is correct
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -17,19 +17,21 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   async validate(accessToken: string, refreshToken: string, profile: any, done: VerifyCallback) {
     const { id, emails, displayName, photos } = profile;
 
-    // Check if the user already exists
-    let user = await this.usersService.findByGoogleId(id);
-    
-    // If the user does not exist, create a new user
-    if (!user) {
-      user = await this.usersService.createUserFromGoogle({
-        googleId: id,
-        email: emails[0].value,
-        name: displayName,
-        profilePicture: photos[0]?.value,
-      });
+    try {
+      let user = await this.usersService.findByGoogleId(id);
+
+      if (!user) {
+        user = await this.usersService.createUserFromGoogle({
+          googleId: id,
+          email: emails[0].value,
+          name: displayName,
+          profilePicture: photos[0]?.value,
+        });
+      }
+
+      done(null, user);
+    } catch (error) {
+      done(error, false); // Handle errors gracefully
     }
-    
-    done(null, user);
   }
 }
