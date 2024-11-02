@@ -9,6 +9,8 @@ import { UsersService } from 'src/users/users.service'; // Import your UserServi
 import * as bcrypt from 'bcryptjs';
 import * as crypto from 'crypto';
 import { ChangePasswordDto } from './dto/change.password.dto';
+import { LoginDto } from './dto/login.dto';
+import { User } from 'src/users/entities/user.entity';
 dotenv.config();
 
 @Injectable()
@@ -16,6 +18,8 @@ export class AuthService {
   constructor(
     @InjectRepository(PasswordReset)
     private passwordResetRepository: Repository<PasswordReset>,
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
     private usersService: UsersService,
     private readonly jwtService: JwtService
   ) { }
@@ -24,7 +28,20 @@ export class AuthService {
     const payload = { email: user.email, sub: user.id };
     return this.jwtService.sign(payload, { secret: process.env.JWT_SECRET });
   }
+//Login
+async login(loginDto: LoginDto) {
+  const user = await this.usersRepository.findOne({
+    where: { email: loginDto.email },
+  });
 
+  if (user && await bcrypt.compare(loginDto.password, user.password)) {
+    const payload = { email: user.email, sub: user.id };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
+  }
+  throw new BadRequestException('Invalid credentials');
+}
   async sendOtp(sendOtpDto: SendOtpDto): Promise<string> {
     const { email } = sendOtpDto;
 

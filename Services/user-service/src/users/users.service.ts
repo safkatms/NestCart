@@ -2,9 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
-import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from './dto/register.dto';
-import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcryptjs';
 import { UpdateProfileDto } from './dto/update-profie.dto';
 
@@ -12,8 +10,7 @@ import { UpdateProfileDto } from './dto/update-profie.dto';
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,  // Directly using TypeORM Repository
-    private jwtService: JwtService,
+    private usersRepository: Repository<User>
   ) { }
 
   // Registration
@@ -43,20 +40,6 @@ export class UsersService {
   }
 
 
-  //Login
-  async login(loginDto: LoginDto) {
-    const user = await this.usersRepository.findOne({
-      where: { email: loginDto.email },
-    });
-
-    if (user && await bcrypt.compare(loginDto.password, user.password)) {
-      const payload = { email: user.email, sub: user.id };
-      return {
-        access_token: this.jwtService.sign(payload),
-      };
-    }
-    throw new BadRequestException('Invalid credentials');
-  }
 
   // Find user by Google ID
   async findByGoogleId(googleId: string): Promise<User | undefined> {

@@ -2,14 +2,13 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } fro
 import { UsersService } from './users.service';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RegisterDto } from './dto/register.dto';
-import { LoginDto } from './dto/login.dto';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { UpdateProfileDto } from './dto/update-profie.dto';
 
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Post('register')
   @ApiOperation({ summary: 'Register a new user' })
@@ -17,14 +16,6 @@ export class UsersController {
   @ApiResponse({ status: 400, description: 'Validation error' })
   async register(@Body() registerDto: RegisterDto) {
     return this.usersService.register(registerDto);
-  }
-
-  @Post('login')
-  @ApiOperation({ summary: 'User login' })
-  @ApiResponse({ status: 200, description: 'Login successful' })
-  @ApiResponse({ status: 400, description: 'Invalid credentials' })
-  async login(@Body() loginDto: LoginDto) {
-    return this.usersService.login(loginDto);
   }
 
   @UseGuards(JwtAuthGuard)

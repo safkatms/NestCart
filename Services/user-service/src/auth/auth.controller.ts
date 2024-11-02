@@ -5,11 +5,20 @@ import { AuthService } from './auth.service';
 import { ResetPasswordDto, SendOtpDto, VerifyOtpDto } from './dto/otp.dto';
 import { ChangePasswordDto } from './dto/change.password.dto';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
+import { LoginDto } from './dto/login.dto';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
+
+  @Post('login')
+  @ApiOperation({ summary: 'User login' })
+  @ApiResponse({ status: 200, description: 'Login successful' })
+  @ApiResponse({ status: 400, description: 'Invalid credentials' })
+  async login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto);
+  }
 
   @Get('google')
   @UseGuards(AuthGuard('google'))

@@ -8,6 +8,7 @@ import { UsersModule } from 'src/users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PasswordReset } from './entities/passwordReset.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { PasswordReset } from './entities/passwordReset.entity';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1h' },
     }),
-    TypeOrmModule.forFeature([PasswordReset]),
+    TypeOrmModule.forFeature([PasswordReset,User]),
   ],
   controllers: [AuthController],
   providers: [AuthService, GoogleStrategy, JwtStrategy], // Add JwtStrategy here
