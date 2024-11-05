@@ -1,30 +1,37 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# User Service
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+The **User Service** is a key part of the NestCart e-commerce platform, responsible for managing user-related functionalities, including authentication, profile management, and address management.
 
-<p align="center">A users service for the NestCart e-commerce platform, built using the <a href="http://nodejs.org" target="_blank">Node.js</a> framework NestJS.</p>
-<p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-<a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-<a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-<a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
+## Features
 
-## Description
+1. **User Authentication**:
+   - Registration
+   - Login
+   - Google Sign-up
+   - Password reset (OTP-based)
+   - Change password
 
-**Users Service** for the **NestCart** e-commerce platform built with NestJS. This service manages user registration, authentication, and profile management.
+2. **User Profile Management**:
+   - View profile
+   - Update profile
 
-## Project Setup
+3. **Address Management**:
+   - Create, update, and delete addresses
+   - Retrieve all addresses for a user
+
+---
+
+## Prerequisites
+
+1. **NestJS** - [NestJS Documentation](https://docs.nestjs.com/)
+2. **Database** - PostgreSQL (configured with TypeORM)
+3. **Swagger** - API documentation
+4. **JWT Authentication** - Secure endpoints
+
+---
+
+## Installation
+
 
 1. Clone the repository:
 
