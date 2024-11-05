@@ -1,5 +1,12 @@
+// src/users/entities/user.entity.ts
 import { Address } from 'src/address/entities/address.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+
+export enum UserType {
+  ADMIN = 'admin',
+  CUSTOMER = 'customer'
+}
+
 
 @Entity()
 export class User {
@@ -20,6 +27,13 @@ export class User {
 
   @Column({ nullable: true })
   profilePicture: string;
+
+  @Column({
+    type: 'enum',
+    enum: UserType,
+    default: UserType.CUSTOMER, // Default user type
+  })
+  userType: UserType;
 
   @OneToMany(() => Address, (address) => address.user, { cascade: true })
   addresses: Address[];

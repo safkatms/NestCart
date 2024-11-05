@@ -28,20 +28,20 @@ export class AuthService {
     const payload = { email: user.email, sub: user.id };
     return this.jwtService.sign(payload, { secret: process.env.JWT_SECRET });
   }
-//Login
-async login(loginDto: LoginDto) {
-  const user = await this.usersRepository.findOne({
-    where: { email: loginDto.email },
-  });
+  //Login
+  async login(loginDto: LoginDto) {
+    const user = await this.usersRepository.findOne({
+      where: { email: loginDto.email },
+    });
 
-  if (user && await bcrypt.compare(loginDto.password, user.password)) {
-    const payload = { email: user.email, sub: user.id };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+    if (user && await bcrypt.compare(loginDto.password, user.password)) {
+      const payload = { email: user.email, sub: user.id, role: user.userType };
+      return {
+        access_token: this.jwtService.sign(payload),
+      };
+    }
+    throw new BadRequestException('Invalid credentials');
   }
-  throw new BadRequestException('Invalid credentials');
-}
   async sendOtp(sendOtpDto: SendOtpDto): Promise<string> {
     const { email } = sendOtpDto;
 
