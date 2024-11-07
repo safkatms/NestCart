@@ -1,12 +1,12 @@
 # 🧑‍💼 User Service
 
-The **User Service** is a key part of the NestCart e-commerce platform, responsible for managing user-related functionalities, including authentication, profile management, and address management.
+The **User Service** is a core component of the NestCart e-commerce platform, responsible for managing user-related functionalities, including authentication, profile management, address management, and user role handling.
 
 ## ✨ Features
 
 1. **User Authentication** 🔐:
    - 📝 Registration
-   - 🔑 Login
+   - 🔑 Login (with banned user restriction)
    - 🌐 Google Sign-up
    - 🔄 Password reset (OTP-based)
    - 🔄 Change password
@@ -14,10 +14,15 @@ The **User Service** is a key part of the NestCart e-commerce platform, responsi
 2. **User Profile Management** 🧾:
    - 👤 View profile
    - ✏️ Update profile
+   - 📸 Update profile picture
 
 3. **Address Management** 📍:
    - ➕ Create, update, and delete addresses
    - 📄 Retrieve all addresses for a user
+
+4. **Admin Features** 👨‍💼:
+   - 🔍 Retrieve all customers
+   - 🚫 Ban or unban customers
 
 ---
 
