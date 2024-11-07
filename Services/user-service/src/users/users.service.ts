@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
+import { User, UserType } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcryptjs';
@@ -95,4 +95,42 @@ export class UsersService {
   async updatePassword(email: string, newPassword: string): Promise<void> {
     await this.usersRepository.update({ email }, { password: newPassword });
   }
+
+  // Method to find all customers
+  async findAllCustomers(): Promise<User[]> {
+    return this.usersRepository.find({
+      where: { userType: UserType.CUSTOMER },
+    });
+  }
+
+  // Ban a customer
+  async banCustomer(userId: number): Promise<User> {
+    const user = await this.usersRepository.findOne({ where: { id: userId, userType: UserType.CUSTOMER } });
+    if (!user) {
+      throw new NotFoundException('Customer not found');
+    }
+
+    if (user.banned) {
+      throw new BadRequestException('Customer is already banned');
+    }
+
+    user.banned = true;
+    return this.usersRepository.save(user);
+  }
+
+  // Unban a customer
+  async unbanCustomer(userId: number): Promise<User> {
+    const user = await this.usersRepository.findOne({ where: { id: userId, userType: UserType.CUSTOMER } });
+    if (!user) {
+      throw new NotFoundException('Customer not found');
+    }
+
+    if (!user.banned) {
+      throw new BadRequestException('Customer is not banned');
+    }
+
+    user.banned = false;
+    return this.usersRepository.save(user);
+  }
+
 }

@@ -35,6 +35,9 @@ export class User {
   })
   userType: UserType;
 
+  @Column({ default: false })
+  banned: boolean;
+  
   @OneToMany(() => Address, (address) => address.user, { cascade: true })
   addresses: Address[];
 }
