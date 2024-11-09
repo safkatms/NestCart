@@ -11,7 +11,6 @@ export enum City {
     BARISAL = 'Barisal',
     RANGPUR = 'Rangpur',
     MYMENSINGH = 'Mymensingh',
-    // Add other cities as needed
   }
 
 export class CreateAddressDto {
